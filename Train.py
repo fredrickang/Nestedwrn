@@ -4,11 +4,11 @@
 # In[2]:
 
 
-get_ipython().run_line_magic('run', 'WRN.ipynb')
-get_ipython().run_line_magic('run', 'input_module.ipynb')
 
+from WRN import *
+from input_module import *
 import time
-
+import tensorflow as tf
 
 # In[1]:
 
@@ -87,10 +87,10 @@ class Train(object):
             sess = tf.Session()
             sess.run(init)
 
-            print 'Start training...'
-            print '-------------------------------------------------------------------------------------------'
+            print ('Start training...')
+            print ('-------------------------------------------------------------------------------------------')
 
-            for step in xrange(FLAGS.train_steps):
+            for step in range(FLAGS.train_steps):
 
                 train_batch_data, train_batch_labels = self.generate_augment_train_batch(all_data, all_labels, FLAGS.train_batch_size)
                 vali_batch_data, vali_batch_labels = self.generate_vali_batch(vali_data, vali_labels, FLAGS.validation_batch_size)
@@ -140,7 +140,7 @@ class Train(object):
 
                 if step == FLAGS.decay_step0 or step == FLAGS.decay_step1:
                     FLAGS.init_lr = 0.1 * FLAGS.init_lr
-                    print 'Learning rate decayed to ', FLAGS.init_lr
+                    print ('Learning rate decayed to ', FLAGS.init_lr)
 
             # sys.stdout.close()
 
@@ -222,3 +222,6 @@ class Train(object):
 
         return np.mean(loss_list), np.mean(error_list), t_val/num_batches
 
+
+train = Train()
+train.train()

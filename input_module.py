@@ -8,7 +8,7 @@ import tarfile
 from six.moves import urllib
 import sys
 import numpy as np
-import pickle as cPickle
+import pickle as pk
 import os
 
 
@@ -16,8 +16,8 @@ import os
 
 
 data_dir = 'cifar100_data'
-full_data_dir = 'cifar100_data/cifar-100-python/train'
-vali_dir = 'cifar100_data/cifar-100-python/test'
+full_data_dir = '../Data/cifar-100-python/noisy-train'
+vali_dir = '../Data/cifar-100-python/noisy-test'
 DATA_URL = 'http://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz'
 
 
@@ -50,7 +50,7 @@ def  read_all_data(path, is_random_label):
     :return: image numpy arrays and label numpy arrays
     '''
     fo = open(path, 'rb')
-    dicts = cPickle.load(fo)
+    dicts = pk.load(fo)
     fo.close()
 
     data = dicts['data']
@@ -212,7 +212,7 @@ def read_validation_data():
     Read in validation data. Whitening at the same time
     :return: Validation image data as 4D numpy array. Validation labels as 1D numpy array
     '''
-    validation_array, validation_labels = read_all_data([vali_dir],
+    validation_array, validation_labels = read_all_data(vali_dir,
                                                              is_random_label=VALI_RANDOM_LABEL)
     validation_array = whitening_image(validation_array)
 

@@ -5,8 +5,7 @@
 
 
 import numpy as np
-get_ipython().run_line_magic('run', 'hyperparameters.ipynb')
-
+from hyperparameters import *
 
 # In[2]:
 
