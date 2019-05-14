@@ -83,7 +83,9 @@ class Train(object):
             self.build_train_validation_graph()
 
             init = tf.global_variables_initializer()
-            sess = tf.Session()
+            config = tf.ConfigProto()
+            config.gpu_options.allow_growth=True
+            sess = tf.Session(config=config)
             sess.run(init)
 
             print ('Start training...')
