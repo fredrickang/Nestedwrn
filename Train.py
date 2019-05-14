@@ -151,7 +151,7 @@ class Train(object):
 
                 if epoch == FLAGS.decay_epoch0 or epoch == FLAGS.decay_epoch1 or epoch ==  FLAGS.decay_epoch2:
                     FLAGS.init_lr = 0.1 * FLAGS.init_lr
-                        print ('Learning rate decayed to ', FLAGS.init_lr)
+                    print ('Learning rate decayed to ', FLAGS.init_lr)
 
             # sys.stdout.close()
 
