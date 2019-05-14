@@ -88,7 +88,7 @@ def load_data_with_transform(address_list, shuffle=True, is_random_label=False):
 
     # This reshape order is really important. Don't change
     # Reshape is correct. Double checked
-    data = data.reshape((num_data, IMG_HEIGHT * IMG_WIDTH, IMG_DEPTH), order='F')
+    data = data.reshape((num_data, IMG_HEIGHT * IMG_WIDTH, IMG_DEPTH), order='C')
     data = data.reshape((num_data, IMG_HEIGHT, IMG_WIDTH, IMG_DEPTH))
 
     if shuffle is True:
