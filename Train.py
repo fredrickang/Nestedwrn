@@ -91,7 +91,7 @@ class Train(object):
             print ('-------------------------------------------------------------------------------------------')
             start_time = time.time()
             for epoch in range(1,FLAGS.train_epochs+1):
-                for step in range(EPOCH_SIZE/FLAGS.train_batch_size):
+                for step in range(int(EPOCH_SIZE/FLAGS.train_batch_size)):
                     train_batch_data, train_batch_labels = self.generate_augment_train_batch(all_data, all_labels, FLAGS.train_batch_size)
                     vali_batch_data, vali_batch_labels = self.generate_vali_batch(vali_data, vali_labels, FLAGS.validation_batch_size)
                     
