@@ -75,12 +75,11 @@ class Train(object):
         self.train_op = self.train_operation(global_step, self.total_loss, self.train_top1_error3, t_vars)
 
 
-    with tf.device('/cpu:0'):
+    with tf.device('/gpu:0'):
         def train(self):
 
             all_data, all_labels = prepare_train_data(padding_size=FLAGS.padding_size)
             vali_data, vali_labels = read_validation_data()
-            print(all_data.shape)
             self.build_train_validation_graph()
 
             init = tf.global_variables_initializer()
@@ -94,8 +93,7 @@ class Train(object):
                 for step in range(int(EPOCH_SIZE/FLAGS.train_batch_size)):
                     train_batch_data, train_batch_labels = self.generate_augment_train_batch(all_data, all_labels, FLAGS.train_batch_size)
                     vali_batch_data, vali_batch_labels = self.generate_vali_batch(vali_data, vali_labels, FLAGS.validation_batch_size)
-                    print(train_batch_data.shape)
-                    print(vali_batch_data.shape)
+
                     _ = sess.run([self.train_op],
                                 {self.image_placeholder: train_batch_data,
                                 self.label_placeholder: train_batch_labels,
