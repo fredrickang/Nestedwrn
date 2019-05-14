@@ -11,7 +11,7 @@ import time
 import tensorflow as tf
 
 # In[1]:
-
+global best_acc1 = 0
 
 class Train(object):
     def __init__(self):
@@ -148,12 +148,19 @@ class Train(object):
                     val_l1, 1 - val_e1, FLAGS.res_blocks*6+2, 1,time1,
                     val_l2, 1 - val_e2, FLAGS.res_blocks*6+2, FLAGS.wide_factor/2, time2,
                     val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
-        
+
 
                 if epoch == FLAGS.decay_epoch0 or epoch == FLAGS.decay_epoch1 or epoch ==  FLAGS.decay_epoch2:
                     FLAGS.init_lr = 0.1 * FLAGS.init_lr
                     print ('Learning rate decayed to ', FLAGS.init_lr)
+                acc = 1 - val_e3
+                
+                if acc >= best_acc1:
+                    best_acc1 = acc
+                    checkpoint_path = os.path.join(train_dir, 'model.ckpt')
+                    saver.save(sess, checkpoint_path, global_step=step)
 
+            print(best_acc1+'%')
             # sys.stdout.close()
 
 
