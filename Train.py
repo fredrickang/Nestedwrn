@@ -11,7 +11,6 @@ import time
 import tensorflow as tf
 
 # In[1]:
-global best_acc1 = 0
 
 class Train(object):
     def __init__(self):
@@ -77,7 +76,7 @@ class Train(object):
 
     with tf.device('/gpu:0'):
         def train(self):
-
+            best_acc1 = 0
             all_data, all_labels = prepare_train_data(padding_size=FLAGS.padding_size)
             vali_data, vali_labels = read_validation_data()
             self.build_train_validation_graph()
