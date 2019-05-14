@@ -95,6 +95,7 @@ class Train(object):
                     train_batch_data, train_batch_labels = self.generate_augment_train_batch(all_data, all_labels, FLAGS.train_batch_size)
                     vali_batch_data, vali_batch_labels = self.generate_vali_batch(vali_data, vali_labels, FLAGS.validation_batch_size)
                     print(train_batch_data.shape)
+                    print(vali_batch_data.shape)
                     _ = sess.run([self.train_op],
                                 {self.image_placeholder: train_batch_data,
                                 self.label_placeholder: train_batch_labels,
