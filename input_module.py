@@ -212,7 +212,7 @@ def read_validation_data():
     Read in validation data. Whitening at the same time
     :return: Validation image data as 4D numpy array. Validation labels as 1D numpy array
     '''
-    validation_array, validation_labels = read_all_data(vali_dir,
+    validation_array, validation_labels = load_data_with_transform(vali_dir,
                                                              is_random_label=VALI_RANDOM_LABEL)
     validation_array = whitening_image(validation_array)
 
