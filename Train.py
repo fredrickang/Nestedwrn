@@ -271,7 +271,7 @@ class Train(object):
             test_image_batch = vali_data[offset:offset+test_batch_size, ...]
             test_label_batch = vali_labels[offset:offset+test_batch_size, ...]
             t = time.time()
-            top1_err_val = sess.run([test_top1_error],feed_dict={self.test_image_placeholder:test_image_batch, self.test_label_placeholder: test_label_batch})
+            top1_err_val = sess.run([self.test_top1_error],feed_dict={self.test_image_placeholder:test_image_batch, self.test_label_placeholder: test_label_batch})
             t_val = time.time() -t
             time_log.append(t_val)
             err_list.append(top1_err_val)
