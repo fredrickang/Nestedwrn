@@ -254,7 +254,7 @@ class Train(object):
         predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)]
         self.test_top1_error = self.top_k_error(predictions[mode], self.test_label_placeholder, 1)
 
-        saver = tf.train.Sver(tf.all_variables())
+        saver = tf.train.Saver(tf.all_variables())
         sess = tf.Session()
 
         saver.restore(sess, ckpt_path)
