@@ -9,7 +9,7 @@ from WRN import *
 from input_module import *
 import time
 import tensorflow as tf
-
+import pandas as pd
 # In[1]:
 
 class Train(object):
@@ -169,14 +169,14 @@ class Train(object):
                 vali_summ3 = tf.Summary()
                 vali_summ3.value.add(tag = 'full_validation_err3',simple_value = val_e3.astype(np.float))
                 #summary_writer.add_summary(vali_summ3,epoch*FLAGS.train_batch_size + step)
-                summary_writer.flush()
+               # summary_writer.flush()
 
-                summary_str = sess.run([summary_op],{self.image_placeholder: train_batch_data,
-                                        self.label_placeholder: train_batch_labels,
-                                        self.vali_image_placeholder: vali_batch_data,
-                                        self.vali_label_placeholder: vali_batch_labels,
-                                        self.lr_placeholder: FLAGS.init_lr})
-                summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
+               # summary_str = sess.run([summary_op],{self.image_placeholder: train_batch_data,
+               #                         self.label_placeholder: train_batch_labels,
+               #                         self.vali_image_placeholder: vali_batch_data,
+               #                         self.vali_label_placeholder: vali_batch_labels,
+               #                         self.lr_placeholder: FLAGS.init_lr})
+               # summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
 
                 print(
                     "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
@@ -189,7 +189,7 @@ class Train(object):
                     val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
                     
                     
-                step_lsit.append(epoch*FLAGS.train_batch_size+step)
+                step_list.append((epoch-1)*FLAGS.train_batch_size+step)
                     
                 train_error_list_1.append(tr_e1)
                 train_error_list_2.append(tr_e2)
