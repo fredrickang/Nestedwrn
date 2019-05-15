@@ -277,7 +277,7 @@ class Train(object):
             t_val = time.time() -t
             time_log.append(t_val)
             err_list.append(top1_err_val)
-
+        sess.close()
         return time_log, err_list
 
 
