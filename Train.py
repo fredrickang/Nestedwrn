@@ -243,7 +243,7 @@ class Train(object):
 
         return np.mean(loss_list), np.mean(error_list), t_val/num_batches
     
-    def test(self, mode, test_batch_size ,ckpt_path, logs = False):
+    def test(self, mode, test_batch_size ,ckpt_path):
         
         self.test_image_placeholder = tf.placeholder(dtype =tf.float32, shape = [test_batch_size, IMG_HEIGHT, IMG_WIDTH, IMG_DEPTH])
         self.test_label_placeholder = tf.placeholder(dtype=tf.int32, shape=[test_batch_size])
