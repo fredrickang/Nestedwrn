@@ -255,7 +255,9 @@ class Train(object):
         self.test_top1_error = self.top_k_error(predictions[mode], self.test_label_placeholder, 1)
 
         saver = tf.train.Saver(tf.all_variables())
-        sess = tf.Session()
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth=True
+        sess = tf.Session(config=config)
 
         saver.restore(sess, ckpt_path)
         print('Model restored from ',ckpt_path)
