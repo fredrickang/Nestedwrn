@@ -170,7 +170,11 @@ class Train(object):
                 summary_writer.add_summary(vali_summ3,epoch*FLAGS.train_batch_size + step)
                 summary_writer.flush()
 
-                summary_str = sess.run(summary_op)
+                summary_str = sess.run([summary_op],{self.image_placeholder: train_batch_data,
+                                self.label_placeholder: train_batch_labels,
+                                self.vali_image_placeholder: vali_batch_data,
+                                self.vali_label_placeholder: vali_batch_labels,
+                                self.lr_placeholder: FLAGS.init_lr})
                 summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
 
                 print(
