@@ -258,7 +258,7 @@ class Train(object):
         config = tf.ConfigProto()
         config.gpu_options.allow_growth=True
         sess = tf.Session(config=config)
-
+        tf.reset_default_graph()
         saver.restore(sess, ckpt_path)
         print('Model restored from ',ckpt_path)
         
