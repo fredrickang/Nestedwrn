@@ -90,7 +90,7 @@ class Train(object):
             sess = tf.Session(config=config)
             sess.run(init)
 
-            summary_writer = tf.summary.FileWriter(train_dir,sess.grah)
+            summary_writer = tf.summary.FileWriter(train_dir,sess.graph)
 
             step_list = []
             train_error_list_1 = []
