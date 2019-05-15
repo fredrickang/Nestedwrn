@@ -81,16 +81,17 @@ class Train(object):
             vali_data, vali_labels = read_validation_data()
             self.build_train_validation_graph()
 
-            init = tf.global_variables_initializer()
+            
             saver = tf.train.Saver(tf.global_variables())
             summary_op = tf.summary.merge_all()
 
+            init = tf.global_variables_initializer()
             config = tf.ConfigProto()
             config.gpu_options.allow_growth=True
             sess = tf.Session(config=config)
             sess.run(init)
 
-            summary_writer = tf.summary.FileWriter(train_dir,sess.graph)
+            summary_writer = tf.summary.FileWriter(train_dir, sess.graph)
 
             step_list = []
             train_error_list_1 = []
@@ -169,10 +170,7 @@ class Train(object):
                 summary_writer.add_summary(vali_summ3,epoch*FLAGS.train_batch_size + step)
                 summary_writer.flush()
 
-                summary_str = sess.run(summary_op, {self.image_placeholder: train_batch_data,
-                                                    self.label_placeholder: train_batch_labels,
-                                                    self.vali_image_placeholder: vali_batch_data,
-                                                    self.vali_label_placeholder: vali_batch_labels})
+                summary_str = sess.run(summary_op)
                 summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
 
                 print(
