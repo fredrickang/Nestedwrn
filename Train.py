@@ -94,7 +94,7 @@ class Train(object):
             for epoch in range(1,FLAGS.train_epochs+1):
                 for step in range(int(EPOCH_SIZE/FLAGS.train_batch_size)):
                     train_batch_data, train_batch_labels = self.generate_augment_train_batch(all_data, all_labels, FLAGS.train_batch_size)
-                    vali_batch_data, vali_batch_labels = self.generate_vali_batch(vali_data, vali_labels, FLAGS.validation_batch_size)
+                    
 
                     _ = sess.run([self.train_op],
                                 {self.image_placeholder: train_batch_data,
@@ -122,45 +122,49 @@ class Train(object):
                                             tr_l1, 1 - tr_e1,
                                             tr_l2, 1 - tr_e2, 
                                             tr_l3, 1 - tr_e3, time.time() - start_time))
-                        
-                   
-                val_l1, val_e1, time1 = self.full_validation(loss=self.vali_loss1, top1_error=self.vali_top1_error1,
+                for val_step in range(int(10000/FLAGS.validation_batch_size)):        
+                    vali_batch_data, vali_batch_labels = self.generate_vali_batch(vali_data, vali_labels, FLAGS.validation_batch_size) 
+                    
+                    val_l1, val_e1, time1 = self.full_validation(loss=self.vali_loss1, top1_error=self.vali_top1_error1,
                                                             vali_data=vali_data, vali_labels=vali_labels,
                                                             session=sess, batch_data=train_batch_data,
                                                             batch_label=train_batch_labels)
 
-                val_l2, val_e2, time2 = self.full_validation(loss=self.vali_loss2, top1_error=self.vali_top1_error2,
-                                                            vali_data=vali_data, vali_labels=vali_labels,
-                                                            session=sess, batch_data=train_batch_data,
-                                                            batch_label=train_batch_labels)
+                    
+                    val_l2, val_e2, time2 = self.full_validation(loss=self.vali_loss2, top1_error=self.vali_top1_error2,
+                                                                vali_data=vali_data, vali_labels=vali_labels,
+                                                                session=sess, batch_data=train_batch_data,
+                                                                batch_label=train_batch_labels)
 
-                val_l3, val_e3, time3 = self.full_validation(loss=self.vali_loss3, top1_error=self.vali_top1_error3,
-                                                            vali_data=vali_data, vali_labels=vali_labels,
-                                                            session=sess, batch_data=train_batch_data,
-                                                            batch_label=train_batch_labels)
+                    val_l3, val_e3, time3 = self.full_validation(loss=self.vali_loss3, top1_error=self.vali_top1_error3,
+                                                                vali_data=vali_data, vali_labels=vali_labels,
+                                                                session=sess, batch_data=train_batch_data,
+                                                                batch_label=train_batch_labels)
 
-                print(
-                    "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
-                    "           Val loss2 = %.3f,Val acc2 = %.3f (WRN-%d-%d), time = %.3f  \n"
-                    "           Val loss3 = %.3f,Val acc3 = %.3f (WRN-%d-%d), time = %.3f, cumulative time = %.3f sec\n"
-                    "-------------------------------------------------------------------------------------------------------------------------------------------"
-                    % (epoch,
-                    val_l1, 1 - val_e1, FLAGS.res_blocks*6+2, 1,time1,
-                    val_l2, 1 - val_e2, FLAGS.res_blocks*6+2, FLAGS.wide_factor/2, time2,
-                    val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
+                    print(
+                        "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
+                        "           Val loss2 = %.3f,Val acc2 = %.3f (WRN-%d-%d), time = %.3f  \n"
+                        "           Val loss3 = %.3f,Val acc3 = %.3f (WRN-%d-%d), time = %.3f, cumulative time = %.3f sec\n"
+                        "-------------------------------------------------------------------------------------------------------------------------------------------"
+                        % (epoch,
+                        val_l1, 1 - val_e1, FLAGS.res_blocks*6+2, 1,time1,
+                        val_l2, 1 - val_e2, FLAGS.res_blocks*6+2, FLAGS.wide_factor/2, time2,
+                        val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
+
+                    acc = 1 - val_e3
+                    if acc >= best_acc1:
+                        best_acc1 = acc
+                        checkpoint_path = os.path.join(train_dir, 'model.ckpt')
+                        saver.save(sess, checkpoint_path, global_step=step)
 
 
                 if epoch == FLAGS.decay_epoch0 or epoch == FLAGS.decay_epoch1 or epoch ==  FLAGS.decay_epoch2:
                     FLAGS.init_lr = 0.1 * FLAGS.init_lr
                     print ('Learning rate decayed to ', FLAGS.init_lr)
-                acc = 1 - val_e3
                 
-                if acc >= best_acc1:
-                    best_acc1 = acc
-                    checkpoint_path = os.path.join(train_dir, 'model.ckpt')
-                    saver.save(sess, checkpoint_path, global_step=step)
-
-            print(best_acc1+'%')
+                
+                
+            print(best_acc1)
             # sys.stdout.close()
 
 
