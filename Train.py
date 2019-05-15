@@ -76,7 +76,7 @@ class Train(object):
 
    
     def train(self):
-        with tf.device('/gpu:0'):
+        with tf.device('/GPU:0'):
             best_acc1 = 0
             all_data, all_labels = prepare_train_data(padding_size=FLAGS.padding_size)
             vali_data, vali_labels = read_validation_data()
