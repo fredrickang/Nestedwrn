@@ -83,10 +83,25 @@ class Train(object):
 
             init = tf.global_variables_initializer()
             saver = tf.train.Saver(tf.global_variables())
+            summary_op = tf.summary.merge_all()
+
             config = tf.ConfigProto()
             config.gpu_options.allow_growth=True
             sess = tf.Session(config=config)
             sess.run(init)
+
+            summary_writer = tf.summary.FileWriter(train_dir,sess.grah)
+
+            step_list = []
+            train_error_list_1 = []
+            train_error_list_2 = []
+            train_error_list_3 = []
+            val_error_list_1 = []
+            val_error_list_2 = []
+            val_error_list_3 = []
+
+
+
 
             print ('Start training...')
             print ('-------------------------------------------------------------------------------------------')
@@ -122,7 +137,7 @@ class Train(object):
                                             tr_l1, 1 - tr_e1,
                                             tr_l2, 1 - tr_e2, 
                                             tr_l3, 1 - tr_e3, time.time() - start_time))
-                    
+                
                 val_l1, val_e1, time1 = self.full_validation(loss=self.vali_loss1, top1_error=self.vali_top1_error1,
                                                             vali_data=vali_data, vali_labels=vali_labels,
                                                             session=sess, batch_data=train_batch_data,
@@ -139,6 +154,28 @@ class Train(object):
                                                                 session=sess, batch_data=train_batch_data,
                                                                 batch_label=train_batch_labels)
 
+                vali_summ1 = tf.Summary()
+                vali_summ1.value.add(tag = 'full_validation_err1',simple_value =val_e1.astype(np.float))
+                summary_writer.add_summary(vali_summ1, epoch*FLAGS.train_batch_size+step)
+                summary_writer.flush()
+                
+                vali_summ2 = tf.Summary()
+                vali_summ2.value.add(tag = 'full_validation_err2',simple_value =val_e2.astype(np.float))
+                summary_writer.add_summary(vali_summ2,epoch*FLAGS.train_batch_size + step)
+                summary_writer.flush()
+
+                vali_summ3 = tf.Summary()
+                vali_summ3.value.add(tag = 'full_validation_err3',simple_value = val_e3.astype(np.float))
+                summary_writer.add_summary(vali_summ3,epoch*FLAGS.train_batch_size + step)
+                summary_writer.flush()
+
+                summary_str = sess.run(summary_op, {self.image_placeholder: train_batch_data,
+                                                    self.label_placeholder: train_batch_labels,
+                                                    self.vali_image_placeholder: validation_batch_data,
+                                                    self.vali_label_placeholder: validation_batch_labels,
+                                                    self.lr_placeholder: FLAGS.init_lr})
+                summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
+
                 print(
                     "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
                     "           Val loss2 = %.3f,Val acc2 = %.3f (WRN-%d-%d), time = %.3f  \n"
@@ -148,13 +185,25 @@ class Train(object):
                     val_l1, 1 - val_e1, FLAGS.res_blocks*6+2, 1,time1,
                     val_l2, 1 - val_e2, FLAGS.res_blocks*6+2, FLAGS.wide_factor/2, time2,
                     val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
+                
+                
+                step_lsit.append(epoch*FLAGS.train_batch_size+step)
+                
+                train_error_list_1.append(tr_e1)
+                train_error_list_2.append(tr_e2)
+                train_error_list_3.append(tr_e3)
 
-                acc = 1 - val_e3
-                if acc >= best_acc1:
-                    best_acc1 = acc
-                    checkpoint_path = os.path.join(train_dir, 'model.ckpt')
-                    saver.save(sess, checkpoint_path, global_step=step)
+                val_error_list_1.append(val_e1)
+                val_error_list_2.append(val_e2)
+                val_error_list_3.append(val_e3)
 
+            
+                checkpoint_path = os.path.join(train_dir, 'model.ckpt')
+                saver.save(sess, checkpoint_path, global_step=epoch)
+
+                df = pd.DataFrame(data={'step':step_list,'train_err1':train_error_list_1,'train_err2':train_error_list_2,'train_err3':train_error_list_3,
+                                        'val_err1':val_error_list_1,'val_err2':val_error_list_2,'val_err3':val_error_list_3})
+                df.to_csv(train_dir +FLAGS.version+ '_error.csv')
 
                 if epoch == FLAGS.decay_epoch0 or epoch == FLAGS.decay_epoch1 or epoch ==  FLAGS.decay_epoch2:
                     FLAGS.init_lr = 0.1 * FLAGS.init_lr
