@@ -156,27 +156,27 @@ class Train(object):
                                                                 session=sess, batch_data=train_batch_data,
                                                                 batch_label=train_batch_labels)
 
-                vali_summ1 = tf.Summary()
-                vali_summ1.value.add(tag = 'full_validation_err1',simple_value =val_e1.astype(np.float))
+                #vali_summ1 = tf.Summary()
+                #vali_summ1.value.add(tag = 'full_validation_err1',simple_value =val_e1.astype(np.float))
                 #summary_writer.add_summary(vali_summ1, epoch*FLAGS.train_batch_size+step)
                 #summary_writer.flush()
                     
-                vali_summ2 = tf.Summary()
-                vali_summ2.value.add(tag = 'full_validation_err2',simple_value =val_e2.astype(np.float))
+                #vali_summ2 = tf.Summary()
+                #vali_summ2.value.add(tag = 'full_validation_err2',simple_value =val_e2.astype(np.float))
                 #summary_writer.add_summary(vali_summ2,epoch*FLAGS.train_batch_size + step)
                 #summary_writer.flush()
 
-                vali_summ3 = tf.Summary()
-                vali_summ3.value.add(tag = 'full_validation_err3',simple_value = val_e3.astype(np.float))
+                #vali_summ3 = tf.Summary()
+                #vali_summ3.value.add(tag = 'full_validation_err3',simple_value = val_e3.astype(np.float))
                 #summary_writer.add_summary(vali_summ3,epoch*FLAGS.train_batch_size + step)
-               # summary_writer.flush()
+                #summary_writer.flush()
 
-               # summary_str = sess.run([summary_op],{self.image_placeholder: train_batch_data,
-               #                         self.label_placeholder: train_batch_labels,
-               #                         self.vali_image_placeholder: vali_batch_data,
-               #                         self.vali_label_placeholder: vali_batch_labels,
-               #                         self.lr_placeholder: FLAGS.init_lr})
-               # summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
+                # summary_str = sess.run([summary_op],{self.image_placeholder: train_batch_data,
+                #                         self.label_placeholder: train_batch_labels,
+                #                         self.vali_image_placeholder: vali_batch_data,
+                #                         self.vali_label_placeholder: vali_batch_labels,
+                #                         self.lr_placeholder: FLAGS.init_lr})
+                # summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
 
                 print(
                     "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
@@ -200,7 +200,7 @@ class Train(object):
                 val_error_list_3.append(val_e3)
 
                 
-                checkpoint_path = os.path.join(train_dir, 'model.ckpt')
+                checkpoint_path = os.path.join(train_dir, 'model.ckpt'+str(epoch))
                 saver.save(sess, checkpoint_path, global_step=epoch)
 
                 df = pd.DataFrame(data={'step':step_list,'train_err1':train_error_list_1,'train_err2':train_error_list_2,'train_err3':train_error_list_3,
@@ -212,8 +212,6 @@ class Train(object):
                     print ('Learning rate decayed to ', FLAGS.init_lr)
                     
                     
-                    
-            print(best_acc1)
             # sys.stdout.close()
                 
 
@@ -334,5 +332,5 @@ class Train(object):
 
 
 
-#train = Train()
-#train.train()
+train = Train()
+train.train()
