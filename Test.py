@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 if args.evaluate is False:
     print("activate with training mode")
-    trian = Train()
+    train = Train()
     train.train()
 else:
     print("activate with test mode")
