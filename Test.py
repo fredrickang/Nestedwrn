@@ -14,9 +14,11 @@ parser.add_argument('--evaluate',default= False , help ='evalute model')
 args = parser.parse_args()
 
 if args.evaluate is False:
+    print("activate with training mode")
     trian = Train()
     train.train()
 else:
+    print("activate with test mode")
     # all task level 3 
     #       batch size = 125
     testbed_1 = Train()
