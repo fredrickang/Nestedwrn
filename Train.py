@@ -83,7 +83,7 @@ class Train(object):
             self.build_train_validation_graph()
 
                 
-            saver = tf.train.Saver(tf.global_variables())
+            saver = tf.train.Saver(tf.global_variables(),max_to_keep=None)
             summary_op = tf.summary.merge_all()
 
             init = tf.global_variables_initializer()
@@ -128,7 +128,7 @@ class Train(object):
                                                                         self.vali_image_placeholder: vali_batch_data,
                                                                         self.vali_label_placeholder: vali_batch_labels,
                                                                         self.lr_placeholder: FLAGS.init_lr})
-                        
+                    """    
                     if step % FLAGS.report_freq == 0 and step > 0:
                         print(
                             "epoch %3d, step %3d :  Train loss1 = %.3f, Train acc1 = %.3f\n"
@@ -139,7 +139,7 @@ class Train(object):
                                             tr_l1, 1 - tr_e1,
                                             tr_l2, 1 - tr_e2, 
                                             tr_l3, 1 - tr_e3, time.time() - start_time))
-                    
+                    """
                 val_l1, val_e1, time1 = self.full_validation(loss=self.vali_loss1, top1_error=self.vali_top1_error1,
                                                             vali_data=vali_data, vali_labels=vali_labels,
                                                             session=sess, batch_data=train_batch_data,
@@ -177,7 +177,7 @@ class Train(object):
                 #                         self.vali_label_placeholder: vali_batch_labels,
                 #                         self.lr_placeholder: FLAGS.init_lr})
                 # summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
-
+                """
                 print(
                     "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
                     "           Val loss2 = %.3f,Val acc2 = %.3f (WRN-%d-%d), time = %.3f  \n"
@@ -188,7 +188,7 @@ class Train(object):
                     val_l2, 1 - val_e2, FLAGS.res_blocks*6+2, FLAGS.wide_factor/2, time2,
                     val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
                     
-                    
+                """       
                 step_list.append((epoch-1)*FLAGS.train_batch_size+step)
                     
                 train_error_list_1.append(tr_e1)
@@ -200,7 +200,7 @@ class Train(object):
                 val_error_list_3.append(val_e3)
 
                 
-                checkpoint_path = os.path.join(train_dir, 'model.ckpt'+str(epoch))
+                checkpoint_path = os.path.join(train_dir, 'model.ckpt')
                 saver.save(sess, checkpoint_path, global_step=epoch)
 
                 df = pd.DataFrame(data={'step':step_list,'train_err1':train_error_list_1,'train_err2':train_error_list_2,'train_err3':train_error_list_3,
@@ -330,7 +330,3 @@ class Train(object):
         sess.close()
         return time_log, err_list
 
-
-
-#train = Train()
-#train.train()
