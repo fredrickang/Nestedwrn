@@ -20,6 +20,8 @@ if args.evaluate is False:
     train.train()
 else:
     print("activate with test mode")
+    print(args.store_dir)
+    print(args.data_dir)
     # all task level 3 
     #       batch size = 125
     
