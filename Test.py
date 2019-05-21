@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 if args.evaluate is False:
     print("activate with training mode")
-    trian = Train()
+    train = Train()
     train.train()
 else:
     print("activate with test mode")
@@ -37,7 +37,7 @@ else:
 
     # all task level 1
     #       batch size = 125
-    testbed_3 ß= Train()
+    testbed_3 = Train()
     time_log, err_log = testbed_3.test(0,125,FLAGS.ckpt_path)
     logs = [time_log, err_log]
     fo = open('1-125.pk','wb')
