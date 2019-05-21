@@ -217,3 +217,10 @@ def read_validation_data():
 
     return validation_array, validation_labels
 
+def read_test_data(test_data_dir):
+    
+    test_array, test_labels = load_data_with_transform([test_data_dir], is_random_label=VALI_RANDOM_LABEL)
+    test_array = whitening_image(test_array)
+
+    return test_array, test_labels
+

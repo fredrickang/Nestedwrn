@@ -293,8 +293,9 @@ class Train(object):
 
         return np.mean(loss_list), np.mean(error_list), t_val/num_batches
     
-    def test(self, mode, test_batch_size ,ckpt_path):
-        
+    def test(self, mode, test_batch_size ,ckpt_path, test_data_dir):
+        mode = mode -1
+
         self.test_image_placeholder = tf.placeholder(dtype =tf.float32, shape = [test_batch_size, IMG_HEIGHT, IMG_WIDTH, IMG_DEPTH])
         self.test_label_placeholder = tf.placeholder(dtype=tf.int32, shape=[test_batch_size])
 
@@ -305,23 +306,25 @@ class Train(object):
         self.test_top1_error = self.top_k_error(predictions[mode], self.test_label_placeholder, 1)
 
         saver = tf.train.Saver(tf.all_variables())
+        
         config = tf.ConfigProto()
         config.gpu_options.allow_growth=True
         sess = tf.Session(config=config)
+
         tf.reset_default_graph()
         saver.restore(sess, ckpt_path)
         print('Model restored from ',ckpt_path)
         
         err_list = []
         time_log = []
-        vali_data, vali_labels = read_validation_data()
+        test_data, test_labels = read_test_data(test_data_dir)
         for step in range(int(10000/test_batch_size)):
             
             if step % 10 == 0:
                 print ('%i batches finished!' %step)
             offset = step * test_batch_size
-            test_image_batch = vali_data[offset:offset+test_batch_size, ...]
-            test_label_batch = vali_labels[offset:offset+test_batch_size, ...]
+            test_image_batch = test_data[offset:offset+test_batch_size, ...]
+            test_label_batch = test_labels[offset:offset+test_batch_size, ...]
             t = time.time()
             top1_err_val = sess.run([self.test_top1_error],feed_dict={self.test_image_placeholder:test_image_batch, self.test_label_placeholder: test_label_batch})
             t_val = time.time() -t
