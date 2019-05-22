@@ -20,7 +20,7 @@ def testing(testbed, mode, batch_size):
     num_batch  = int(10000/batch_size)
     for step in range(num_batch):
         offset = step*batch_size
-        test_batch_image = test_image[offset:offset+batchsize,...]
+        test_batch_image = test_image[offset:offset+batch_size,...]
         if batch_size == 1:
             test_batch_image = test_batch_image.reshape(1,32,32,3)
             dummy = np.zeros((124,32,32,3))
