@@ -383,7 +383,7 @@ class Train(object):
     
         return correct/10000
 
-   def test4seq(self, modes, data_dir):
+    def test4seq(self, modes, data_dir):
         batch_size = 1
         tf.reset_default_graph()
 
