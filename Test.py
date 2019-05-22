@@ -18,6 +18,7 @@ def testing(testbed, mode, batch_size):
     predic_label = []
     test_image, test_label = read_test_data(args.data_dir)
     num_batch  = int(10000/batch_size)
+    sess = testbed.restore()
     for step in range(num_batch):
         offset = step*batch_size
         test_batch_image = test_image[offset:offset+batch_size,...]
@@ -26,7 +27,7 @@ def testing(testbed, mode, batch_size):
             dummy = np.zeros((124,32,32,3))
             test_batch_image = np.concatenate((test_batch_image,dummy))
         
-        prediction = testbed.test(test_batch_image,mode)
+        prediction = testbed.test(sess,test_batch_image,mode)
         
         for i in range(batch_size):
             predic_label.append(np.argmax(prediction[0][i]))
