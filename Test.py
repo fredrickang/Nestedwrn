@@ -23,7 +23,7 @@ else:
     print("activate with test mode")
     print(args.store_dir)
     print(args.data_dir)
-    
+    '''
     acc = []
   
     # mode 3 batch size 125
@@ -51,14 +51,22 @@ else:
     # mode 3 batch_size 1
     test4time_2 = Train()
     time.append(test4time_2.test4time(3,1,FLAGS.test_ckpt_path,args.data_dir))
+    # mode 2 batch_size 125
+    test4time_5 = Train()
+    time.append(test4time_5.test4time(2,125,FLAGS.test_ckpt_path,args.data_dir))
+    # mode 2 batch_size 1
+    test4time_6 = Train()
+    time.append(test4time_6.test4time(2,1,FLAGS.test_ckpt_path,args.data_dir))
     # mode 1 batch_size 125
     test4time_3 = Train()
     time.append(test4time_3.test4time(1,125,FLAGS.test_ckpt_path,args.data_dir))
     # mode 1 batch_size 1
     test4time_4 = Train()
     time.append(test4time_4.test4time(1,1,FLAGS.test_ckpt_path,args.data_dir))
+  
+    
 
     fo = open(os.path.join(args.store_dir,'time.pk'),'wb')
     pk.dump(time, fo)
     fo.close()
-    '''
+    
