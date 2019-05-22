@@ -369,7 +369,6 @@ class Train(object):
                 test_batch_image = test_batch_image.reshape((1,32,32,3))
                 dummy = np.zeros((124,32,32,3))
                 test_batch_image = np.concatenate((test_batch_image,dummy))
-                print(test_batch_image.shape)   
             
         
             batch_prediction_array = sess.run([predictions[mode]],feed_dict={self.test_image_placeholder: test_batch_image})
