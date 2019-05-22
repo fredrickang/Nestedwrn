@@ -372,7 +372,7 @@ class Train(object):
             batch_prediction_array = sess.run([predictions[mode]],feed_dict={self.test_image_placeholder: test_batch_image})
 
             for i in range(batch_size):
-                predic_label.append(np.argmax(prediction[0][i]))
+                predic_label.append(np.argmax(batch_prediction_array[0][i]))
         
         correct = 0
         for i in range(10000):
