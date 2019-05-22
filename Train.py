@@ -133,7 +133,7 @@ class Train(object):
                                                                         self.vali_image_placeholder: vali_batch_data,
                                                                         self.vali_label_placeholder: vali_batch_labels,
                                                                         self.lr_placeholder: FLAGS.init_lr})
-                    """    
+                        
                     if step % FLAGS.report_freq == 0 and step > 0:
                         print(
                             "epoch %3d, step %3d :  Train loss1 = %.3f, Train acc1 = %.3f\n"
@@ -144,7 +144,7 @@ class Train(object):
                                             tr_l1, 1 - tr_e1,
                                             tr_l2, 1 - tr_e2, 
                                             tr_l3, 1 - tr_e3, time.time() - start_time))
-                    """
+                    
                 val_l1, val_e1, time1 = self.full_validation(loss=self.vali_loss1, top1_error=self.vali_top1_error1,
                                                             vali_data=vali_data, vali_labels=vali_labels,
                                                             session=sess, batch_data=train_batch_data,
@@ -297,8 +297,8 @@ class Train(object):
         t_val = time.time() - t
 
         return np.mean(loss_list), np.mean(error_list), t_val/num_batches
-    '''
-    def test(self, mode, test_batch_size ,ckpt_path, test_data_dir):
+
+    def test4time(self, mode, test_batch_size ,ckpt_path, test_data_dir):
         mode = mode -1
 
         self.test_image_placeholder = tf.placeholder(dtype =tf.float32, shape = [test_batch_size, IMG_HEIGHT, IMG_WIDTH, IMG_DEPTH])
@@ -320,7 +320,7 @@ class Train(object):
         saver.restore(sess, ckpt_path)
         print('Model restored from ',ckpt_path)
         
-        err_list = []
+
         time_log = []
         test_data, test_labels = read_test_data(test_data_dir)
         for step in range(int(10000/test_batch_size)):
@@ -334,11 +334,9 @@ class Train(object):
             top1_err_val = sess.run([self.test_top1_error],feed_dict={self.test_image_placeholder:test_image_batch, self.test_label_placeholder: test_label_batch})
             t_val = time.time() -t
             time_log.append(t_val)
-            err_list.append(top1_err_val)
         sess.close()
-        return time_log, err_list
+        return time_log
 
-    '''
     def test(self, test_image_array, mode):
         mode = mode -1
 
@@ -359,10 +357,6 @@ class Train(object):
 
         print("Model restored from", FLAGS.test_ckpt_path)
 
-        prediction_array = np.array([]).reshape(-1,100)
-
         batch_prediction_array = sess.run([predictions[mode]],feed_dict={self.test_image_placeholder: test_image_array})
 
-        prediction_array = np.concatenate((prediction_array,batch_prediction_array))
-
-        return prediction_array
+        return batch_prediction_array
