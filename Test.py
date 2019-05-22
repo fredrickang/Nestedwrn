@@ -45,7 +45,7 @@ else:
     print("activate with test mode")
     print(args.store_dir)
     print(args.data_dir)
-
+    '''
     acc = []
   
     # mode 3 batch size 125
@@ -64,7 +64,7 @@ else:
     fo = open(os.path.join(args.store_dir,'acc.pk'),'wb')
     pk.dump(acc, fo)
     fo.close()
-
+    '''
     time = []
 
     # mode 3 batch size 125
