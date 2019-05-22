@@ -336,8 +336,21 @@ class Train(object):
             time_log.append(t_val)
         sess.close()
         return time_log
-    def restore(self):
-        saver = tf.train.Saver()
+
+    def test(self, batch_size, mode, data_dir):
+        mode = mode -1
+
+        tf.reset_default_graph()
+
+        predic_label = []
+        test_image, test_label = read_test_data(data_dir)
+        num_batch  = int(10000/batch_size)
+        self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[125,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
+
+        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, True, reuse=False)
+        predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)]
+
+        saver = tf.train.Saver(tf.all_variables())
         
         config = tf.ConfigProto()
         config.gpu_options.allow_growth=True
@@ -346,18 +359,24 @@ class Train(object):
         saver.restore(sess, FLAGS.test_ckpt_path)
 
         print("Model restored from", FLAGS.test_ckpt_path)
-        return sess
 
-    def test(self, sess, test_image_array, mode):
-        mode = mode -1
-
-        tf.reset_default_graph()
-        num_test_images = len(test_image_array)
-        self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[num_test_images,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
-
-        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, True, reuse=False)
-        predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)
+        for step in range(num_batch):
+            offset = step*batch_size
+            test_batch_image = test_image[offset:offset+batch_size,...]
+            if batch_size == 1:
+                test_batch_image = test_batch_image.reshape(1,32,32,3)
+                dummy = np.zeros((124,32,32,3))
+                test_batch_image = np.concatenate((test_batch_image,dummy))
+            
         
-        batch_prediction_array = sess.run([predictions[mode]],feed_dict={self.test_image_placeholder: test_image_array})
+            batch_prediction_array = sess.run([predictions[mode]],feed_dict={self.test_image_placeholder: test_batch_image})
 
-        return batch_prediction_array
+            for i in range(batch_size):
+                predic_label.append(np.argmax(prediction[0][i]))
+        
+        correct = 0
+        for i in range(10000):
+            if test_label[i] == predic_label[i]:
+                correct +=1
+    
+        return correct/10000
