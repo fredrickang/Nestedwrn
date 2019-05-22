@@ -340,7 +340,7 @@ class Train(object):
     def test(self, test_image_array, mode):
         mode = mode -1
 
-
+        tf.reset_default_graph()
         num_test_images = len(test_image_array)
         self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[num_test_images,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
 
