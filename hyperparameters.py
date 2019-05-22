@@ -18,9 +18,9 @@ FLAGS = tf.app.flags.FLAGS
 
 ## The following flags are related to save paths, tensorboard outputs and screen outputs
 
-tf.app.flags.DEFINE_string('version', 'test_1', '''A version number defining the directory to save
+tf.app.flags.DEFINE_string('version', 'tmp', '''A version number defining the directory to save
 logs and checkpoints''')
-tf.app.flags.DEFINE_integer('report_freq', 390, '''Steps takes to output errors on the screen
+tf.app.flags.DEFINE_integer('report_freq', 1, '''Steps takes to output errors on the screen
 and write summaries''')
 tf.app.flags.DEFINE_float('train_ema_decay', 0.9, '''The decay factor of the train error's
 moving average shown on tensorboard''')
@@ -31,11 +31,11 @@ moving average shown on tensorboard''')
 
 ## The following flags define hyper-parameters regards training
 
-tf.app.flags.DEFINE_integer('train_epochs', 120, '''Total steps that you want to train''')
+tf.app.flags.DEFINE_integer('train_epochs', 125, '''Total steps that you want to train''')
 tf.app.flags.DEFINE_boolean('is_full_validation', True, '''Validation w/ full validation set or
 a random batch''')
 tf.app.flags.DEFINE_integer('train_batch_size', 128, '''Train batch size''')
-tf.app.flags.DEFINE_integer('validation_batch_size', 128, '''Validation batch size, better to be
+tf.app.flags.DEFINE_integer('validation_batch_size', 1, '''Validation batch size, better to be
 a divisor of 10000 for this task''')
 tf.app.flags.DEFINE_integer('test_batch_size', 128, '''Test batch size''')
 
@@ -73,7 +73,7 @@ each side of the image''')
 
 tf.app.flags.DEFINE_string('ckpt_path', 'logs/model.ckpt-120', '''Checkpoint
 directory to restore''')
-tf.app.flags.DEFINE_boolean('is_use_ckpt', False, '''Whether to load a checkpoint and continue
+tf.app.flags.DEFINE_boolean('is_use_ckpt', True, '''Whether to load a checkpoint and continue
 training''')
 
 tf.app.flags.DEFINE_string('test_ckpt_path', 'model_110.ckpt-79999', '''Checkpoint

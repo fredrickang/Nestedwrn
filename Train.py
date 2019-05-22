@@ -90,7 +90,12 @@ class Train(object):
             config = tf.ConfigProto()
             config.gpu_options.allow_growth=True 
             sess = tf.Session(config=config)
-            sess.run(init)
+
+            if FLAGS.is_use_ckpt is True:
+                saver.restore(sess, FLAGS.ckpt_path)
+                print ('Restored from checkpoint...')
+            else:
+                sess.run(init)
 
             summary_writer = tf.summary.FileWriter(train_dir, sess.graph)
 
@@ -177,7 +182,7 @@ class Train(object):
                 #                         self.vali_label_placeholder: vali_batch_labels,
                 #                         self.lr_placeholder: FLAGS.init_lr})
                 # summary_writer.add_summary(summary_str, epoch*FLAGS.train_batch_size + step)
-                """
+                
                 print(
                     "epoch %3d: Val loss1 = %.3f,Val acc1 = %.3f (WRN-%d-%d), time = %.3f  \n"
                     "           Val loss2 = %.3f,Val acc2 = %.3f (WRN-%d-%d), time = %.3f  \n"
@@ -188,7 +193,7 @@ class Train(object):
                     val_l2, 1 - val_e2, FLAGS.res_blocks*6+2, FLAGS.wide_factor/2, time2,
                     val_l3, 1 - val_e3, FLAGS.res_blocks*6+2, FLAGS.wide_factor, time3, time.time() - start_time))
                     
-                """       
+                       
                 step_list.append((epoch-1)*FLAGS.train_batch_size+step)
                     
                 train_error_list_1.append(tr_e1)
