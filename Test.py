@@ -17,7 +17,7 @@ args = parser.parse_args()
 def testing(testbed, mode, batch_size):
     predic_label = []
     test_image, test_label = read_test_data(args.data_dir)
-    num_batch  = 10000/batch_size 
+    num_batch  = int(10000/batch_size)
     for step in range(num_batch):
         offset = step*batch_size
         test_batch_image = test_image[offset:offset+batchsize,...]
