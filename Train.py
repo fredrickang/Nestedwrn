@@ -347,7 +347,7 @@ class Train(object):
         num_batch  = int(10000/batch_size)
         self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[125,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
 
-        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, True, reuse=False)
+        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, False, reuse=False)
         predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)]
 
         saver = tf.train.Saver(tf.all_variables())
