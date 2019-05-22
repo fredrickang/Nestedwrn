@@ -69,16 +69,16 @@ else:
 
     # mode 3 batch size 125
     test4time_1 = Train() 
-    time.append(test4time_1.test4time(3,125,FLAGS.test_ckpt_path))
+    time.append(test4time_1.test4time(3,125,FLAGS.test_ckpt_path,args.data_dir))
     # mode 3 batch_size 1
     test4time_2 = Train()
-    time.append(test4time_2.test4time(3,1,FLAGS.test_ckpt_path))
+    time.append(test4time_2.test4time(3,1,FLAGS.test_ckpt_path,args.data_dir))
     # mode 1 batch_size 125
     test4time_3 = Train()
-    time.append(test4time_3.test4time(1,125,FLAGS.test_ckpt_path))
+    time.append(test4time_3.test4time(1,125,FLAGS.test_ckpt_path,args.data_dir))
     # mode 1 batch_size 1
     test4time_4 = Train()
-    time.append(test4time_4.test4time(1,1,FLAGS.test_ckpt_path))
+    time.append(test4time_4.test4time(1,1,FLAGS.test_ckpt_path,args.data_dir))
 
     fo = open(os.path.join(args.store_dir,'time.pk'),'wb')
     pk.dump(time, fo)
