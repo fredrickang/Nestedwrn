@@ -14,28 +14,6 @@ parser.add_argument('--store_dir',default='test',help= 'dir for store result')
 parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
 args = parser.parse_args()
 
-def testing(testbed, mode, batch_size):
-    predic_label = []
-    test_image, test_label = read_test_data(args.data_dir)
-    num_batch  = int(10000/batch_size)
-    for step in range(num_batch):
-        offset = step*batch_size
-        test_batch_image = test_image[offset:offset+batch_size,...]
-        if batch_size == 1:
-            test_batch_image = test_batch_image.reshape(1,32,32,3)
-            dummy = np.zeros((124,32,32,3))
-            test_batch_image = np.concatenate((test_batch_image,dummy))
-        
-        prediction = testbed.test(test_batch_image,mode)
-        
-        for i in range(batch_size):
-            predic_label.append(np.argmax(prediction[0][i]))
-    correct = 0
-    for i in range(10000):
-        if test_label[i] == predic_label[i]:
-            correct +=1
-    
-    return correct/10000
 
 if args.evaluate is False:
     print("activate with training mode")
@@ -45,23 +23,23 @@ else:
     print("activate with test mode")
     print(args.store_dir)
     print(args.data_dir)
-    '''
+    
     acc = []
   
     # mode 3 batch size 125
-    testbed_1 = Train() 
-    acc.append(testbed_1.test(125,3,args.data_dir))
+    #testbed_1 = Train() 
+    #acc.append(testbed_1.test(125,3,args.data_dir))
     # mode 3 batch_size 1
     testbed_2 = Train()
     acc.append(testbed_2.test(1,3,args.data_dir))
     # mode 1 batch_size 125
-    testbed_3 = Train()
-    acc.append(testbed_3.test(125,1,args.data_dir))
+    #testbed_3 = Train()
+    #acc.append(testbed_3.test(125,1,args.data_dir))
     # mode 1 batch_size 1
     testbed_4 = Train()
     acc.append(testbed_4.test(1,1,args.data_dir))
 
-    fo = open(os.path.join(args.store_dir,'acc.pk'),'wb')
+    fo = open(os.path.join(args.store_dir,'acc2.pk'),'wb')
     pk.dump(acc, fo)
     fo.close()
     '''
@@ -83,3 +61,4 @@ else:
     fo = open(os.path.join(args.store_dir,'time.pk'),'wb')
     pk.dump(time, fo)
     fo.close()
+    '''
