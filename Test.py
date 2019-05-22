@@ -9,7 +9,7 @@ import warnings
 from Train import *
 
 parser = argparse.ArgumentParser(description="NestedNet training")
-parser.add_argument('--evaluate',default= True , help ='evalute model')
+parser.add_argument('--evaluate',default= False , help ='evalute model')
 parser.add_argument('--store_dir',default='test',help= 'dir for store result')
 parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
 args = parser.parse_args()
