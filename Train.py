@@ -361,6 +361,8 @@ class Train(object):
         print("Model restored from", FLAGS.test_ckpt_path)
 
         for step in range(num_batch):
+            if step % 10 == 0:
+                print ('%i batches finished!' %step)
             offset = step*batch_size
             test_batch_image = test_image[offset:offset+batch_size,...]
             if batch_size == 1:
