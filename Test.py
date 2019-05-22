@@ -26,7 +26,7 @@ def testing(testbed, mode, batch_size):
             dummy = np.zeros((124,32,32,3))
             test_batch_image = np.concatenate((test_batch_image,dummy))
         
-        prediction = testbed.test(mode,test_batch_image)
+        prediction = testbed.test(test_batch_image,mode)
         
         for i in range(batch_size):
             predic_label.append(np.argmax(prediction[0][i]))
