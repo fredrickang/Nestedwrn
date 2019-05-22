@@ -382,3 +382,48 @@ class Train(object):
                 correct +=1
     
         return correct/10000
+
+   def test4seq(self, modes, data_dir):
+        batch_size = 1
+        tf.reset_default_graph()
+
+        predic_label = []
+        test_image, test_label = read_test_data(data_dir)
+        num_batch  = len(modes)
+        self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[125,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
+
+        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, False, reuse=False)
+        predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)]
+
+        saver = tf.train.Saver(tf.all_variables())
+        
+        config = tf.ConfigProto()
+        config.gpu_options.allow_growth=True
+        sess = tf.Session(config=config)
+
+        saver.restore(sess, FLAGS.test_ckpt_path)
+
+        print("Model restored from", FLAGS.test_ckpt_path)
+
+        for step in range(num_batch):
+            if step % 10 == 0:
+                print ('%i batches finished!' %step)
+            offset = step*batch_size
+            test_batch_image = test_image[offset:offset+batch_size,...]
+            if batch_size == 1:
+                test_batch_image = test_batch_image.reshape((1,32,32,3))
+                dummy = np.zeros((124,32,32,3))
+                test_batch_image = np.concatenate((test_batch_image,dummy))
+            
+        
+            batch_prediction_array = sess.run([predictions[modes[step]]],feed_dict={self.test_image_placeholder: test_batch_image})
+
+            for i in range(batch_size):
+                predic_label.append(np.argmax(batch_prediction_array[0][i]))
+        
+        correct = 0
+        for i in range(len(modes)):
+            if test_label[i] == predic_label[i]:
+                correct +=1
+    
+        return correct/len(modes)
