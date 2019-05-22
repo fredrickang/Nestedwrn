@@ -336,29 +336,28 @@ class Train(object):
             time_log.append(t_val)
         sess.close()
         return time_log
-    
-    def test(self, test_image_array, mode):
-        mode = mode -1
-
-        tf.reset_default_graph()
-        num_test_images = len(test_image_array)
-        
-
-        saver = tf.train.Saver(tf.all_variables())
+    def restore(self):
+        saver = tf.train.Saver()
         
         config = tf.ConfigProto()
         config.gpu_options.allow_growth=True
         sess = tf.Session(config=config)
 
-        self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[num_test_images,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
-
-        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, True, reuse=False)
-        predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)]
-
         saver.restore(sess, FLAGS.test_ckpt_path)
 
         print("Model restored from", FLAGS.test_ckpt_path)
+        return sess
 
+    def test(self, sess, test_image_array, mode):
+        mode = mode -1
+
+        tf.reset_default_graph()
+        num_test_images = len(test_image_array)
+        self.test_image_placeholder = tf.placeholder(dtype=tf.float32, shape=[num_test_images,IMG_HEIGHT,IMG_WIDTH,IMG_DEPTH])
+
+        logits1, logits2, logits3 = inference(self.test_image_placeholder, FLAGS.res_blocks, FLAGS.wide_factor, True, reuse=False)
+        predictions = [tf.nn.softmax(logits1),tf.nn.softmax(logits2),tf.nn.softmax(logits3)
+        
         batch_prediction_array = sess.run([predictions[mode]],feed_dict={self.test_image_placeholder: test_image_array})
 
         return batch_prediction_array
