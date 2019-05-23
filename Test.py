@@ -11,7 +11,7 @@ from Train import *
 parser = argparse.ArgumentParser(description="NestedNet training")
 parser.add_argument('--evaluate',default= True , help ='evalute model')
 parser.add_argument('--store_dir',default='test2',help= 'dir for store result')
-parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
+parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv1',help = 'dir for test data')
 args = parser.parse_args()
 
 
@@ -39,7 +39,7 @@ else:
     testbed_4 = Train()
     acc.append(testbed_4.test(1,1,args.data_dir))
 
-    fo = open(os.path.join(args.store_dir,'lv3_acc.pk'),'wb')
+    fo = open(os.path.join(args.store_dir,'lv1_acc.pk'),'wb')
     pk.dump(acc, fo)
     fo.close()
     '''
