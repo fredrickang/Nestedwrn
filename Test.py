@@ -9,8 +9,8 @@ import warnings
 from Train import *
 
 parser = argparse.ArgumentParser(description="NestedNet training")
-parser.add_argument('--evaluate',default= False , help ='evalute model')
-parser.add_argument('--store_dir',default='test',help= 'dir for store result')
+parser.add_argument('--evaluate',default= True , help ='evalute model')
+parser.add_argument('--store_dir',default='test2',help= 'dir for store result')
 parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
 args = parser.parse_args()
 
@@ -23,23 +23,23 @@ else:
     print("activate with test mode")
     print(args.store_dir)
     print(args.data_dir)
-    '''
+    
     acc = []
   
     # mode 3 batch size 125
-    #testbed_1 = Train() 
-    #acc.append(testbed_1.test(125,3,args.data_dir))
+    testbed_1 = Train() 
+    acc.append(testbed_1.test(125,3,args.data_dir))
     # mode 3 batch_size 1
     testbed_2 = Train()
     acc.append(testbed_2.test(1,3,args.data_dir))
     # mode 1 batch_size 125
-    #testbed_3 = Train()
-    #acc.append(testbed_3.test(125,1,args.data_dir))
+    testbed_3 = Train()
+    acc.append(testbed_3.test(125,1,args.data_dir))
     # mode 1 batch_size 1
     testbed_4 = Train()
     acc.append(testbed_4.test(1,1,args.data_dir))
 
-    fo = open(os.path.join(args.store_dir,'acc2.pk'),'wb')
+    fo = open(os.path.join(args.store_dir,'lv3_acc.pk'),'wb')
     pk.dump(acc, fo)
     fo.close()
     '''
@@ -69,4 +69,4 @@ else:
     fo = open(os.path.join(args.store_dir,'time.pk'),'wb')
     pk.dump(time, fo)
     fo.close()
-    
+    '''
