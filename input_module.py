@@ -50,7 +50,8 @@ def  read_all_data(path, is_random_label):
     :return: image numpy arrays and label numpy arrays
     '''
     fo = open(path, 'rb')
-    dicts = pk.load(fo)
+   #dicts = pk.load(fo)
+    dicts = pk.load(fo,encoding='iso-8859-1')
     fo.close()
 
     data = dicts['data']
