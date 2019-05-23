@@ -20,7 +20,7 @@ FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string('version', 'test_2', '''A version number defining the directory to save
 logs and checkpoints''')
-tf.app.flags.DEFINE_integer('report_freq', 10, '''Steps takes to output errors on the screen
+tf.app.flags.DEFINE_integer('report_freq', 50, '''Steps takes to output errors on the screen
 and write summaries''')
 tf.app.flags.DEFINE_float('train_ema_decay', 0.9, '''The decay factor of the train error's
 moving average shown on tensorboard''')
@@ -31,7 +31,7 @@ moving average shown on tensorboard''')
 
 ## The following flags define hyper-parameters regards training
 
-tf.app.flags.DEFINE_integer('train_epochs', 120, '''Total steps that you want to train''')
+tf.app.flags.DEFINE_integer('train_epochs', 200, '''Total steps that you want to train''')
 tf.app.flags.DEFINE_boolean('is_full_validation', True, '''Validation w/ full validation set or
 a random batch''')
 tf.app.flags.DEFINE_integer('train_batch_size', 128, '''Train batch size''')
@@ -41,9 +41,9 @@ tf.app.flags.DEFINE_integer('test_batch_size', 128, '''Test batch size''')
 
 tf.app.flags.DEFINE_float('init_lr', 0.1, '''Initial learning rate''')
 tf.app.flags.DEFINE_float('lr_decay_factor', 0.1, '''How much to decay the learning rate each time''')
-tf.app.flags.DEFINE_integer('decay_epoch0', 30, '''At which epoch to decay the learning rate''')
-tf.app.flags.DEFINE_integer('decay_epoch1', 60, '''At which epoch to decay the learning rate''')
-tf.app.flags.DEFINE_integer('decay_epoch2', 90, "At which epoch to decay the learning rate")
+tf.app.flags.DEFINE_integer('decay_epoch0', 90, '''At which epoch to decay the learning rate''')
+tf.app.flags.DEFINE_integer('decay_epoch1', 120, '''At which epoch to decay the learning rate''')
+tf.app.flags.DEFINE_integer('decay_epoch2', 150, "At which epoch to decay the learning rate")
 
 
 # In[5]:
