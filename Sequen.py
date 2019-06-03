@@ -9,7 +9,7 @@ import warnings
 from Train import *
 
 
-log_dir = 'logs are here!'
+log_dir = 'logs.pk'
 parser.add_argument('--store_dir',default='test',help= 'dir for store result')
 parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
 args = parser.parse_args()
@@ -17,9 +17,12 @@ args = parser.parse_args()
 fo = open(log_dir,'rb')
 logs = pk.load(fo)
 fo.close()
+acc = []
+for i in range(len(logs)):
+    for j in range(len(logs[i])):
+        testbed = Train()
+        acc.append(testbed.test4seq(logs[i][j],args.data_dir))
 
-testbed = Train()
-acc = testbed.test4seq(logs,args.data_dir)
 
 fo = open('seq_acc.pk','wb')
 pk.dump(acc, fo)
