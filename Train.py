@@ -416,7 +416,7 @@ class Train(object):
                 test_batch_image = np.concatenate((test_batch_image,dummy))
             
         
-            batch_prediction_array = sess.run([predictions[modes[step]]],feed_dict={self.test_image_placeholder: test_batch_image})
+            batch_prediction_array = sess.run([predictions[modes[step]-1]],feed_dict={self.test_image_placeholder: test_batch_image})
 
             for i in range(batch_size):
                 predic_label.append(np.argmax(batch_prediction_array[0][i]))

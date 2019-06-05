@@ -8,8 +8,9 @@ import warnings
 
 from Train import *
 
+parser = argparse.ArgumentParser()
 
-log_dir = 'logs.pk'
+log_dir = 'logs-interf2.pk'
 parser.add_argument('--store_dir',default='test',help= 'dir for store result')
 parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
 args = parser.parse_args()
@@ -24,6 +25,6 @@ for i in range(len(logs)):
         acc.append(testbed.test4seq(logs[i][j],args.data_dir))
 
 
-fo = open('seq_acc.pk','wb')
+fo = open('seq_acc-interf2-lv3.pk','wb')
 pk.dump(acc, fo)
 fo.close()
