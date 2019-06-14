@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser()
 
 log_dir = 'logs-interf2.pk'
 parser.add_argument('--store_dir',default='test',help= 'dir for store result')
-parser.add_argument('--data_dir',default= '../Data/cifar-100-python/test-lv3',help = 'dir for test data')
+parser.add_argument('--data_dir',default= '../../Data/cifar-100-python/test-lv3',help = 'dir for test data')
 args = parser.parse_args()
 
 fo = open(log_dir,'rb')
